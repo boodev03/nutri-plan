@@ -9,7 +9,7 @@ export function revokeImageUrl(url: string): void {
 }
 
 export function isValidImageType(file: File): boolean {
-  return IMAGE_CONSTRAINTS.ALLOWED_TYPES.includes(file.type);
+  return IMAGE_CONSTRAINTS.ALLOWED_TYPES.includes(file.type as "image/jpeg" | "image/png" | "image/jpg");
 }
 
 export function validateImageSize(file: File): boolean {

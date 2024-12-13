@@ -1,20 +1,20 @@
-import { genAI, GEMINI_MODEL } from './geminiConfig';
-import { fileToGenerativePart } from '../../utils/fileUtils';
 import { AnalysisResult } from '../../types/analysis';
-import { NUTRITION_PROMPT } from './prompts';
+import { fileToGenerativePart } from '../../utils/fileUtils';
 import { validateAnalysisResult } from '../../utils/validators';
+import { GEMINI_MODEL, genAI } from './geminiConfig';
+import { NUTRITION_PROMPT } from './prompts';
 
 export async function analyzeImageWithGemini(imageFile: File): Promise<AnalysisResult> {
   try {
     const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
     const imagePart = await fileToGenerativePart(imageFile);
-    
+
     const result = await model.generateContent({
       contents: [{
         role: "user",
         parts: [
           { text: NUTRITION_PROMPT },
-          { inline_data: imagePart.inlineData }
+          { inlineData: imagePart.inlineData }
         ]
       }]
     });
@@ -24,10 +24,10 @@ export async function analyzeImageWithGemini(imageFile: File): Promise<AnalysisR
     }
 
     const text = result.response.text();
-    
+
     // Clean the response text by removing markdown code blocks
     const cleanedText = text.replace(/```json\s*|\s*```/g, '').trim();
-    
+
     try {
       const parsedResult = JSON.parse(cleanedText);
       return validateAnalysisResult(parsedResult);

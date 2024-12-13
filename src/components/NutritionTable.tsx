@@ -1,5 +1,4 @@
-import React from 'react';
-import { NutritionInfo } from '../types/analysis';
+import { NutritionInfo } from "../types/analysis";
 
 interface NutritionTableProps {
   nutrition: NutritionInfo;
@@ -7,15 +6,29 @@ interface NutritionTableProps {
 
 export function NutritionTable({ nutrition }: NutritionTableProps) {
   const items = [
-    { label: 'Calories', value: `${nutrition.calories} kcal`, daily: '-' },
-    { label: 'Protein', value: `${nutrition.protein}g`, daily: `${((nutrition.protein * 4) / 2000 * 100).toFixed(1)}%` },
-    { label: 'Carbohydrates', value: `${nutrition.carbs}g`, daily: `${((nutrition.carbs * 4) / 2000 * 100).toFixed(1)}%` },
-    { label: 'Fat', value: `${nutrition.fat}g`, daily: `${((nutrition.fat * 9) / 2000 * 100).toFixed(1)}%` },
+    { label: "Calories", value: `${nutrition.calories} kcal`, daily: "-" },
+    {
+      label: "Protein",
+      value: `${nutrition.protein}g`,
+      daily: `${(((nutrition.protein * 4) / 2000) * 100).toFixed(1)}%`,
+    },
+    {
+      label: "Carbohydrates",
+      value: `${nutrition.carbs}g`,
+      daily: `${(((nutrition.carbs * 4) / 2000) * 100).toFixed(1)}%`,
+    },
+    {
+      label: "Fat",
+      value: `${nutrition.fat}g`,
+      daily: `${(((nutrition.fat * 9) / 2000) * 100).toFixed(1)}%`,
+    },
   ];
 
   return (
     <div className="w-full">
-      <h3 className="text-lg font-semibold text-gray-700 mb-4">Detailed Nutrition</h3>
+      <h3 className="text-lg font-semibold text-gray-700 mb-4">
+        Detailed Nutrition
+      </h3>
       <div className="border rounded-lg overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">

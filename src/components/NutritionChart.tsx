@@ -1,7 +1,6 @@
-import React from 'react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
-import { NutritionInfo } from '../types/analysis';
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
+import { Pie } from "react-chartjs-2";
+import { NutritionInfo } from "../types/analysis";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -11,19 +10,19 @@ interface NutritionChartProps {
 
 export function NutritionChart({ nutrition }: NutritionChartProps) {
   const data = {
-    labels: ['Protein', 'Carbs', 'Fat'],
+    labels: ["Protein", "Carbs", "Fat"],
     datasets: [
       {
         data: [nutrition.protein, nutrition.carbs, nutrition.fat],
         backgroundColor: [
-          'rgba(54, 162, 235, 0.8)',
-          'rgba(75, 192, 192, 0.8)',
-          'rgba(255, 99, 132, 0.8)',
+          "rgba(54, 162, 235, 0.8)",
+          "rgba(75, 192, 192, 0.8)",
+          "rgba(255, 99, 132, 0.8)",
         ],
         borderColor: [
-          'rgba(54, 162, 235, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(255, 99, 132, 1)',
+          "rgba(54, 162, 235, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(255, 99, 132, 1)",
         ],
         borderWidth: 1,
       },
@@ -33,17 +32,17 @@ export function NutritionChart({ nutrition }: NutritionChartProps) {
   const options = {
     plugins: {
       legend: {
-        position: 'bottom' as const,
+        position: "bottom" as const,
       },
       tooltip: {
         callbacks: {
-          label: function(context: any) {
-            const label = context.label || '';
+          label: function (context: any) {
+            const label = context.label || "";
             const value = context.raw || 0;
             return `${label}: ${value}g`;
-          }
-        }
-      }
+          },
+        },
+      },
     },
     responsive: true,
     maintainAspectRatio: true,

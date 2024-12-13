@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface ImagePreviewProps {
   imageUrl: string;
   foodName: string;
@@ -17,7 +15,9 @@ export function ImagePreview({ imageUrl, foodName }: ImagePreviewProps) {
       </div>
       {foodName && (
         <div className="mt-4">
-          <h3 className="text-lg font-semibold text-gray-800">Detected Food:</h3>
+          <h3 className="text-lg font-semibold text-gray-800">
+            Detected Food:
+          </h3>
           <p className="text-gray-700 mt-1">{foodName}</p>
         </div>
       )}
