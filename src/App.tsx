@@ -1,79 +1,87 @@
-import { useState } from "react";
-import { ErrorMessage } from "./components/ErrorMessage";
-import { Footer } from "./components/Footer";
-import { Header } from "./components/Header";
-import { ImagePreview } from "./components/ImagePreview";
-import { ImageUploader } from "./components/ImageUploader";
-import { LoadingSpinner } from "./components/LoadingSpinner";
-import { NutritionDisplay } from "./components/NutritionDisplay";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React from "react";
+import { Toaster } from "react-hot-toast";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { LoginForm } from "./components/auth/LoginForm";
+import { Calendar } from "./components/calendar/Calendar";
+import { LandingPage } from "./components/LandingPage";
+import { Layout } from "./components/Layout";
 import { SuggestTab } from "./components/SuggestTab";
-import { useImageAnalysis } from "./hooks/useImageAnalysis";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { MealProvider } from "./contexts/MealContext";
 
-export default function App() {
-  const [activeTab, setActiveTab] = useState<"analyze" | "suggest">("analyze");
-  const { selectedImage, analysisResult, loading, error, analyzeFood } =
-    useImageAnalysis();
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+}
+
+function AppContent() {
+  const { user } = useAuth();
+
+  if (!user) {
+    return (
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100">
-      <div className="flex-grow py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto">
-          <Header />
+    <Layout>
+      <Routes>
+        <Route path="/" element={<Navigate to="/suggest" replace />} />
+        <Route
+          path="/suggest"
+          element={
+            <ProtectedRoute>
+              <SuggestTab />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/calendar"
+          element={
+            <ProtectedRoute>
+              <Calendar />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </Layout>
+  );
+}
 
-          <div className="mb-8">
-            <div className="border-b border-gray-200">
-              <nav className="-mb-px flex space-x-8">
-                <button
-                  onClick={() => setActiveTab("analyze")}
-                  className={`${
-                    activeTab === "analyze"
-                      ? "border-blue-500 text-blue-600"
-                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                  } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-                >
-                  Analyze Food
-                </button>
-                <button
-                  onClick={() => setActiveTab("suggest")}
-                  className={`${
-                    activeTab === "suggest"
-                      ? "border-blue-500 text-blue-600"
-                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                  } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-                >
-                  Suggest Goals
-                </button>
-              </nav>
-            </div>
-          </div>
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
-          {activeTab === "analyze" ? (
-            <div className="space-y-8">
-              <ImageUploader onImageSelect={analyzeFood} />
-
-              {error && <ErrorMessage message={error} />}
-              {loading && <LoadingSpinner />}
-
-              {selectedImage && !loading && (
-                <ImagePreview
-                  imageUrl={selectedImage}
-                  foodName={analysisResult?.foodName || ""}
-                />
-              )}
-
-              {analysisResult && !loading && (
-                <NutritionDisplay
-                  nutrition={analysisResult.nutrition}
-                  foodName={analysisResult.foodName}
-                />
-              )}
-            </div>
-          ) : (
-            <SuggestTab />
-          )}
-        </div>
-      </div>
-      <Footer />
-    </div>
+export default function App() {
+  return (
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <MealProvider>
+            <AppContent />
+            <Toaster position="top-right" />
+          </MealProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   );
 }

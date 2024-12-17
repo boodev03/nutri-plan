@@ -1,8 +1,8 @@
-import { AnalysisResult } from '../../types/analysis';
+import { genAI, GEMINI_MODEL } from './geminiConfig';
 import { fileToGenerativePart } from '../../utils/fileUtils';
-import { validateAnalysisResult } from '../../utils/validators';
-import { GEMINI_MODEL, genAI } from './geminiConfig';
+import { AnalysisResult } from '../../types/analysis';
 import { NUTRITION_PROMPT } from './prompts';
+import { validateAnalysisResult } from '../../utils/validators';
 
 export async function analyzeImageWithGemini(imageFile: File): Promise<AnalysisResult> {
   try {

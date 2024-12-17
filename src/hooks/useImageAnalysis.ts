@@ -1,8 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { analyzeImage } from '../services/gemini/imageAnalysis';
 import { AnalysisResult } from '../types/analysis';
-import { createImageUrl, revokeImageUrl } from '../utils/imageUtils';
 import { handleAnalysisError } from '../utils/errorHandlers';
+import { createImageUrl, revokeImageUrl } from '../utils/imageUtils';
 
 export function useImageAnalysis() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -15,11 +15,11 @@ export function useImageAnalysis() {
       setLoading(true);
       setError(null);
       setAnalysisResult(null);
-      
+
       if (selectedImage) {
         revokeImageUrl(selectedImage);
       }
-      
+
       const imageUrl = createImageUrl(file);
       setSelectedImage(imageUrl);
 

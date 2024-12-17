@@ -1,28 +1,10 @@
-export interface UserInfo {
+export interface UserProfile {
+  id: string;
+  user_id: string;
   age: number;
-  weight: number; // in kg
   height: number; // in cm
-  activityLevel: ActivityLevel;
-  goal: Goal;
-}
-
-export enum ActivityLevel {
-  SEDENTARY = 'sedentary',
-  LIGHT = 'light',
-  MODERATE = 'moderate',
-  VERY_ACTIVE = 'very_active',
-  EXTRA_ACTIVE = 'extra_active'
-}
-
-export enum Goal {
-  LOSE_WEIGHT = 'lose_weight',
-  MAINTAIN = 'maintain',
-  GAIN_WEIGHT = 'gain_weight'
-}
-
-export interface NutritionGoals {
-  calories: number;
-  protein: number;
-  carbs: number;
-  fat: number;
+  weight: number; // in kg
+  goal: 'lose_weight' | 'gain_weight' | 'maintain' | 'build_muscle';
+  activity_level: 'sedentary' | 'light' | 'moderate' | 'very_active' | 'extra_active';
+  dietary_restrictions?: string[];
 }

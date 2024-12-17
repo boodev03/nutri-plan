@@ -25,3 +25,13 @@ export interface FormInputProps extends React.InputHTMLAttributes<HTMLInputEleme
   error?: string;
   suffix?: string;
 }
+
+export interface FormSelectProps
+  extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  label: string;
+  error?: string;
+  options: Array<{
+    value: string;
+    label: string;
+  }>;
+}
